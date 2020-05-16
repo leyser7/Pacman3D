@@ -1,14 +1,13 @@
-CFLAGS= -I./include
-LDFLAGS=-lSDL -lm -lSDL_net -lGL -lGLU -lSDL_mixer -lglut -lGLU -lGL
-OBJS=
+SRC = ./src
+CFLAGS=-I./include
+LDFLAGS=-lGLU -lGL -lglut
+OBJS=obj/myfuncs.o obj/mytypes.o obj/text3d.o
 
-all: pacman
+all: $(OBJS)
+	$(CXX) $(CFLAGS) -o pacman $(SRC)/main.cpp $(OBJS) $(LDFLAGS) 
 
-pacman: $(OBJS)
-        $(CXX) $(CFLAGS) -o pacman src/Maquette/Main.cpp $(OBJS) $(LDFLAGS)
+obj/%.o: $(SRC)/%.cpp
+	$(CXX) $(CFLAGS) -c $< -o $@ $(LDFLAGS)
 
-%.o: %.c
-        $(CXX) $(CFLAGS) -c $< $(LDFLAGS) $(OBJS)
-
-clean:
-        rm -f pacman $(OBJS) 
+clean: 
+	rm -rf obj/*
