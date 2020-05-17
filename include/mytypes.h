@@ -1,6 +1,6 @@
 #ifndef __MYTYPES_H__
 #define __MYTYPES_H__
-
+#include "Player.h"
 /** All the States the game can be in.. */
 typedef enum tagGameStates
 {
@@ -30,21 +30,7 @@ typedef enum tagGameErrors
     */
 }GameErrors;
 
-typedef class tagPlayer             //Ball
-{
-    float pos_x,pos_y,pos_z;
-    float xVel,yVel,zVel;
-    bool isjumping;
-public :
-    tagPlayer();        //Constructor
-    void handle_input(unsigned char key,int x,int y);      //Update player pos and do other checkings
-    void display();     //Display player on the required position
-    void update();      //Update some required variables
 
-    void get_pos(float& x,float& y,float& z);
-    void set_pos(float  x,float  y,float  z);
-
-}Player;
 
 typedef class tagArrow
 {

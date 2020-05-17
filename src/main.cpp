@@ -1,5 +1,6 @@
 #include"myfuncs.h"
 #include"consts.h"
+#include <iostream>
 
 int main(int argc, char *argv[])
 {
@@ -9,12 +10,10 @@ int main(int argc, char *argv[])
     glutInitWindowSize(640,480);
     glutInitWindowPosition(0,0);
     glutCreateWindow("GLUT Shapes");
-    glutFullScreen();
+    //glutFullScreen();
 
-/*    glutGameModeString("640x480:32@60");
-    glutEnterGameMode();
-*/
-
+    //glutGameModeString("640x480:32@60");
+    //glutEnterGameMode();
 
     init_Rendering();
 
