@@ -81,7 +81,7 @@ void update_vars(int n)
         break;
     case GSPlaying:
         played = true;
-        //global_MainPlayer.update();
+        global_MainPlayer.update();
         /*
         //Arrows
         float x,y,z;
@@ -185,8 +185,8 @@ void init_Rendering()
     }
     //for (int i = 0; i < MAX_WALL; ++i)
     // {
-    float diametro = P_RADIUS*2.0f;
-    //left
+    float diametro = WALL_W*2.0f;
+    //left down
     walls[0] = new Wall(diametro*-7.0f, diametro*-7.0f, diametro*6.0f, diametro);
     walls[1] = new Wall(diametro*-4.0f, diametro*-6.0f, diametro,  diametro*2.0f);
 
@@ -197,7 +197,8 @@ void init_Rendering()
 
     walls[5] = new Wall(diametro*-4.0f, diametro*-3.0f, diametro*3.0f,  diametro);
 
-    //rigth
+    //rigth down
+    
     walls[6] = new Wall(diametro*2.0f, diametro*-7.0f, diametro*6.0f, diametro);
     walls[7] = new Wall(diametro*4.0f, diametro*-6.0f, diametro,  diametro*2.0f);
 
@@ -208,10 +209,54 @@ void init_Rendering()
 
     walls[11] = new Wall(diametro*2.0f, diametro*-3.0f, diametro*3.0f,  diametro);
 
+    // center 
     walls[12] = new Wall(diametro*-2.0f, diametro*-5.0f, diametro*5.0f, diametro);
     walls[13] = new Wall(0, diametro*-7.0f, diametro,  diametro*2.0f);
-    
-    //}
+
+    walls[14] = new Wall(diametro*-2.0f, diametro*-1.0f, diametro*5.0f, diametro);
+    walls[15] = new Wall(0, diametro*-3.0f, diametro,  diametro*2.0f);
+
+    walls[16] = new Wall(diametro*-2.0f, diametro*5.0f, diametro*5.0f, diametro);
+    walls[17] = new Wall(0, diametro*3.0f, diametro,  diametro*2.0f);
+
+    walls[18] = new Wall(0, diametro*7.0f, diametro,  diametro*2.0f);
+
+    walls[19] = new Wall(diametro*-4.0f, diametro*-1.0f, diametro,  diametro*2.0f);
+    walls[20] = new Wall(diametro*4.0f, diametro*-1.0f, diametro,  diametro*2.0f);
+
+    walls[21] = new Wall(diametro*-4.0f, diametro*2.0f, diametro,  diametro*4.0f);
+    walls[22] = new Wall(diametro*-3.0f, diametro*3.0f, diametro*2.0f,  diametro);
+
+    walls[23] = new Wall(diametro*4.0f, diametro*2.0f, diametro,  diametro*4.0f);
+    walls[24] = new Wall(diametro*2.0f, diametro*3.0f, diametro*2.0f,  diametro);
+
+    walls[25] = new Wall(diametro*-7.0f, diametro*5.0f, diametro*2.0f, diametro);
+    walls[26] = new Wall(diametro*6.0f, diametro*5.0f, diametro*2.0f, diametro);
+
+    walls[27] = new Wall(diametro*-7.0f, diametro*7.0f, diametro*2.0f, diametro);
+    walls[28] = new Wall(diametro*6.0f, diametro*7.0f, diametro*2.0f, diametro);
+
+    walls[29] = new Wall(diametro*-4.0f, diametro*7.0f, diametro*3.0f, diametro);
+    walls[30] = new Wall(diametro*2.0f, diametro*7.0f, diametro*3.0f, diametro);
+    // laterales
+    walls[31] = new Wall(diametro*-8.0f, diametro*-1.0f, diametro*3.0f, diametro/2.0f);
+    walls[32] = new Wall(diametro*6.0f, diametro*-1.0f, diametro*3.0f, diametro/2.0f);
+
+    walls[33] = new Wall(diametro*-8.0f, diametro*1.0f/2.0f, diametro*3.0f, diametro/2.0f);
+    walls[34] = new Wall(diametro*6.0f, diametro*1.0f/2.0f, diametro*3.0f, diametro/2.0f);
+
+    walls[35] = new Wall(diametro*-8.0f, diametro*2.0f, diametro*3.0f, diametro/2.0f);
+    walls[36] = new Wall(diametro*6.0f, diametro*2.0f, diametro*3.0f, diametro/2.0f);
+
+    walls[37] = new Wall(diametro*-8.0f, diametro*3.0f+diametro/2.0f,diametro*3.0f, diametro/2.0f);
+    walls[38] = new Wall(diametro*6.0f, diametro*3.0f+diametro/2.0f, diametro*3.0f, diametro/2.0f);
+
+    walls[39] = new Wall(diametro*-6.0f+diametro/2.0f, diametro*2.0f, diametro/2.0f, diametro*2.0f);
+    walls[40] = new Wall(diametro*6.0f, diametro*2.0f, diametro/2.0f, diametro*2.0f);
+
+    walls[41] = new Wall(diametro*-6.0f+diametro/2.0f, diametro*-1.0f,diametro/2.0f, diametro*2.0f);
+    walls[42] = new Wall(diametro*6.0f, diametro*-1.0f, diametro/2.0f, diametro*2.0f);
+
     srand(time(NULL)); // seed the random number generator
 
     glClearColor(CLR_CLR_R, CLR_CLR_G, CLR_CLR_B, CLR_CLR_A);
@@ -267,6 +312,7 @@ void draw_ground()
     glVertex3f(-(BOARD_SIZE / 2), 0, (BOARD_SIZE / 2));
     glEnd();
     glColor3f(0, 0, 1);
+    /*
     glBegin(GL_LINES);
     glVertex3f(-(BOARD_SIZE / 2) + (BOARD_SIZE / 8), 0.001, -(BOARD_SIZE / 2));
     glVertex3f(-(BOARD_SIZE / 2) + (BOARD_SIZE / 8), 0.001, (BOARD_SIZE / 2));
@@ -283,6 +329,7 @@ void draw_ground()
     glVertex3f(-(BOARD_SIZE / 2) + 7 * (BOARD_SIZE / 8), 0.001, -(BOARD_SIZE / 2));
     glVertex3f(-(BOARD_SIZE / 2) + 7 * (BOARD_SIZE / 8), 0.001, (BOARD_SIZE / 2));
     glEnd();
+    */
     glPopMatrix();
 }
 
@@ -517,7 +564,7 @@ void menu_display()
     glColor3f(0.2, 0.8, 0.2);
     glTranslatef(0, 1.7, 0);
     glScalef(0.7, 0.5, 0.5);
-    t3dDraw3D("BallRush 1.0", 0, 0, 0.2, 0.5);
+    t3dDraw3D("Pacman 3D", 0, 0, 0.2, 0.5);
     glPopMatrix();
     glTranslatef(0, 1.0, 0);
     if (played && !cancontinue)
@@ -653,7 +700,6 @@ void key(unsigned char key, int x, int y)
             global_GameState = GSMenu;
             break;
         default:
-            //std::cout<<"hola"<<std::endl;
             global_MainPlayer.handle_input(key, x, y, walls);
         }
         break;

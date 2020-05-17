@@ -27,7 +27,7 @@ using namespace std;
 #define  GAME_FPS        30
 #define  BOARD_SIZE      6.0f
 #define  MAX_LANES       8
-#define  MAX_WALL        14
+#define  MAX_WALL        43
 #define  LVL_NUM_RAND     1000
 #define  POINTS_ON_ONE_ARROW  1
 #define  POINTS_ON_ONE_DONUT  20
@@ -49,11 +49,12 @@ const int LVL_NUM_PROB[MAX_LEVELS] = {22,17,14,10};
 //Starting X,Y,Z coords of the player
 #define  P_START_X       0.0f
 #define  P_START_Y       0.0f
-#define  P_START_Z       -1.5f
-#define  P_RADIUS        0.175f
-#define  P_X_VEL         0.13f
-#define  P_Y_VEL_MAX     0.40f
-#define  P_Z_VEL         0.14f
+#define  P_START_Z       -1.4f
+#define  P_RADIUS        0.130f //0.175f
+#define  WALL_W          0.175f //0.175f
+#define  P_X_VEL         0.08f  //0.13f
+#define  P_Y_VEL_MAX     0.40f  //0.40f
+#define  P_Z_VEL         0.09f  //0.14f
 #define  P_MAX_HEALTH    BOARD_SIZE/2.0
 #define  P_DEDUCT_H_ON_ONE_ARROW         P_MAX_HEALTH/10.0
 
