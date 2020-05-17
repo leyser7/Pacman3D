@@ -1,7 +1,9 @@
 #include "myfuncs.h"
 #include "consts.h"
-#include "Wall.h"
 #include "Player.h"
+#include "Ghost.h"
+#include "Wall.h"
+
 #include <iostream>
 
 int screen_w = 640, screen_h = 480;
@@ -14,10 +16,12 @@ Wall *walls[MAX_WALL];
 
 Player global_MainPlayer;
 
-Camera global_Camera;
-Arrow *arrows[MAX_LANES];
+Ghost *ghosts[MAX_GHOST];
 
-Donut donut;
+Camera global_Camera;
+//Arrow *arrows[MAX_LANES];
+
+//Donut donut;
 
 GameStates global_GameState = GSMenu;
 GameErrors global_Error = GE_NO_ERROR;
@@ -28,6 +32,20 @@ bool cancontinue = false;
 float menu_sel_angle = 0.0;
 float controls_angle = 0.0f;
 float credits_angle = 0.0f;
+
+int cont = 0;
+void init_ghost(Ghost *ghost)
+{
+    
+    //int n = rand() % LVL_NUM_RAND;   // Just a random number
+    //if (n > LVL_NUM_PROB[level - 1]) // Use some probability criterion to decide when to update the Arrow
+    //    return;
+    ghosts[0]->set_pos(0, P_START_Y, 0.175*1 );
+    //ghost->set_vel(0, 0, ARR_VEL_Z * (1.0f + (float)(level - 1) * 0.6f));
+    ghost->set_Alive(true);
+    cont++;
+}
+
 
 void init_arrow(Arrow *arr)
 {
@@ -82,6 +100,26 @@ void update_vars(int n)
     case GSPlaying:
         played = true;
         global_MainPlayer.update();
+        //Ghost 
+        
+        if(ghosts[0]->isCollided(global_MainPlayer)){
+            std::cout<<"here ghost"<<endl;
+            ghosts[0]->set_Alive(false);
+                health -= P_DEDUCT_H_ON_ONE_ARROW;
+                if(health<=0.0f)
+                {
+                    cancontinue = false;
+                    won = false;
+                    key(27,0,0);
+                }
+        }
+        ghosts[0]->update(global_MainPlayer, walls);
+        if(ghosts[0]->get_Alive() == false)
+                init_ghost(ghosts[0]);
+        else {
+
+        }
+        
         /*
         //Arrows
         float x,y,z;
@@ -115,6 +153,7 @@ void update_vars(int n)
         }
         */
         //Donut
+        /*
         if (donut.get_Alive() == false)
         {
             init_donut(donut);
@@ -125,7 +164,7 @@ void update_vars(int n)
             {
                 points += POINTS_ON_ONE_DONUT;
             }
-        }
+        }*/
 
         if (POINTS_TO_PASS[level - 1] <= points)
         {
@@ -154,10 +193,12 @@ void init_level()
     health = P_MAX_HEALTH;
     for (int i = 0; i < MAX_LANES; ++i)
     {
-        arrows[i]->set_Alive(false);
-        init_arrow(arrows[i]);
+        //arrows[i]->set_Alive(false);
+        //init_arrow(arrows[i]);
     }
+    init_ghost(ghosts[0]);
     global_MainPlayer.set_pos(P_START_X, P_START_Y, P_START_Z);
+
 }
 
 //Initializes 3D rendering
@@ -178,10 +219,10 @@ void init_Rendering()
         global_Error = GE_CHARSET_ERROR;
         exit((int)global_Error);
     }
-
+    ghosts[0] = new Ghost;
     for (int i = 0; i < MAX_LANES; ++i)
     {
-        arrows[i] = new Arrow(i);
+        //arrows[i] = new Arrow(i);
     }
     //for (int i = 0; i < MAX_WALL; ++i)
     // {
@@ -430,7 +471,7 @@ void playing_display()
     // glTranslatef(0.5f, -0.3f, -1.8f);
     //glRotatef(global_Camera.angle, global_Camera.a_x, global_Camera.a_y, global_Camera.a_z);
 
-    //draw_texts();
+    draw_texts();
     draw_ground();
     //draw_health();
     for (int i = 0; i < MAX_WALL; ++i)
@@ -439,6 +480,7 @@ void playing_display()
     }
 
     global_MainPlayer.display();
+    ghosts[0]->display();
     /*
     float x, y, z;
     global_MainPlayer.get_pos(x, y ,z);
@@ -446,11 +488,13 @@ void playing_display()
     std::cout<<"y: "<<y<<" ";
     std::cout<<"z: "<<z<<std::endl;
     */
+    /*
     for (int i = 0; i < MAX_LANES; ++i)
     {
         arrows[i]->display();
     }
     donut.display();
+    */
 
     cancontinue = true;
 }
@@ -700,7 +744,7 @@ void key(unsigned char key, int x, int y)
             global_GameState = GSMenu;
             break;
         default:
-            global_MainPlayer.handle_input(key, x, y, walls);
+            global_MainPlayer.handle_input(key, walls);
         }
         break;
     case GSControls:

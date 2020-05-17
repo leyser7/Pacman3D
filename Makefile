@@ -1,7 +1,7 @@
 SRC = ./src
 CFLAGS=-I./include
 LDFLAGS=-lGLU -lGL -lglut
-OBJS=obj/myfuncs.o obj/mytypes.o obj/text3d.o obj/Wall.o obj/Player.o
+OBJS=obj/myfuncs.o obj/mytypes.o obj/text3d.o obj/Wall.o obj/Player.o obj/Ghost.o
 
 all: $(OBJS)
 	$(CXX) $(CFLAGS) -o pacman $(SRC)/main.cpp $(OBJS) $(LDFLAGS) 

@@ -28,6 +28,7 @@ using namespace std;
 #define  BOARD_SIZE      6.0f
 #define  MAX_LANES       8
 #define  MAX_WALL        43
+#define  MAX_GHOST       1
 #define  LVL_NUM_RAND     1000
 #define  POINTS_ON_ONE_ARROW  1
 #define  POINTS_ON_ONE_DONUT  20

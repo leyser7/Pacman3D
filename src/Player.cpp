@@ -17,69 +17,83 @@ tagPlayer::tagPlayer()
 }
 
 //Update player position based on input...
-void tagPlayer::handle_input(unsigned char key, int x, int y, Wall **walls)
+bool tagPlayer::handle_input(unsigned char key, Wall **walls)
 {
-    std::cout<<"x: "<<pos_x<<" ";
-    std::cout<<"y: "<<pos_y<<" ";
-    std::cout<<"z: "<<pos_z<<std::endl;
+    //std::cout<<"x: "<<pos_x<<" ";
+    //std::cout<<"y: "<<pos_y<<" ";
+    //std::cout<<"z: "<<pos_z<<std::endl;
     float w_x, w_z, w_w, w_h;
+    bool Ismoving = true;
     switch (key)
     {
     case 'd':
         pos_x += P_X_VEL;
-        if (pos_x > ((BOARD_SIZE / 2.0) - (P_RADIUS)))
+        if (pos_x > ((BOARD_SIZE / 2.0) - (P_RADIUS))){
+            Ismoving = false;
             pos_x = (BOARD_SIZE / 2.0) - P_RADIUS;
+        }
         for (int i = 0; i < MAX_WALL; ++i)
         {
             walls[i]->get(w_x,w_z,w_w,w_h);
             if (pos_x > (w_x - P_RADIUS)& pos_x < (w_x + w_w - P_RADIUS) & pos_z > (w_z-P_RADIUS) & pos_z < (w_z+w_h+P_RADIUS))
             {
                 pos_x = w_x-P_RADIUS;
-                std::cout << "here" << std::endl;
+                Ismoving = false;
+                //std::cout << "here" << std::endl;
             }
         }
         break;
 
     case 'a':
         pos_x -= P_X_VEL;
-        if ((-pos_x) > ((BOARD_SIZE / 2.0) - (P_RADIUS)))
+        if ((-pos_x) > ((BOARD_SIZE / 2.0) - (P_RADIUS))){
+            Ismoving = false;
             pos_x = -((BOARD_SIZE / 2.0) - P_RADIUS);
+        }      
     for (int i = 0; i < MAX_WALL; ++i)
         {
         walls[i]->get(w_x,w_z,w_w,w_h);
         if (pos_x < (w_x +w_w + P_RADIUS) &  pos_x > (w_x - P_RADIUS) & pos_z > (w_z-P_RADIUS) & pos_z < (w_z+w_h+P_RADIUS))
         {
             pos_x = w_x + w_w + P_RADIUS;
-            std::cout << "here" << std::endl;
+            Ismoving = false;
+            //std::cout << "here" << std::endl;
         }
         }
         break;
 
     case 's':
        pos_z -= P_Z_VEL;
-        if ((-pos_z) > ((BOARD_SIZE / 2.0) - (P_RADIUS)))
-            pos_z = -((BOARD_SIZE / 2.0) - P_RADIUS);
+        if ((-pos_z) > ((BOARD_SIZE / 2.0) - (P_RADIUS))){
+            Ismoving = false;
+             pos_z = -((BOARD_SIZE / 2.0) - P_RADIUS);
+        }
+           
             for (int i = 0; i < MAX_WALL; ++i)
         {
         walls[i]->get(w_x,w_z,w_w,w_h);
         if (pos_z < (w_z +w_h + P_RADIUS) &  pos_z > (w_z - P_RADIUS) & pos_x > (w_x-P_RADIUS) & pos_x < (w_x+w_w+P_RADIUS))
         {
             pos_z = w_z + w_h + P_RADIUS;
-            std::cout << "here" << std::endl;
+            Ismoving = false;
+            //std::cout << "here" << std::endl;
         }}
         break;
 
     case 'w':
      pos_z += P_Z_VEL;
-        if (pos_z > ((BOARD_SIZE / 2.0) - (P_RADIUS)))
+        if (pos_z > ((BOARD_SIZE / 2.0) - (P_RADIUS))){
+            Ismoving = false;
             pos_z = (BOARD_SIZE / 2.0) - P_RADIUS;
+        }
         for (int i = 0; i < MAX_WALL; ++i)
         {
         walls[i]->get(w_x,w_z,w_w,w_h);
         if (pos_z > (w_z - P_RADIUS) & pos_z < (w_z +w_h + P_RADIUS) & pos_x > (w_x-P_RADIUS) & pos_x < (w_x+w_w+P_RADIUS))
         {
             pos_z = w_z - (P_RADIUS);
-            std::cout << "here" << std::endl;
+            Ismoving = false;
+            //std::cout << "here" << std::endl;
         }}
         break;
         
@@ -91,6 +105,7 @@ void tagPlayer::handle_input(unsigned char key, int x, int y, Wall **walls)
         }
         break;
     }
+    return Ismoving;
 }
 
 void tagPlayer::update()
