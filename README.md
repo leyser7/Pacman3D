@@ -11,8 +11,6 @@ make clean && make && ./pacman
 
 Abhijeet Patil
 Abhinav Tripathi
-___________________________________________________
-NOT FOR REDISTRIBUTION!
-It is a punishable act if done intentionally or unintentionally without prior permission of the programmers
-
 URL : https://github.com/genuinelucifer/ball_rush
+
+
