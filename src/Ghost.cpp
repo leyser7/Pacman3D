@@ -23,17 +23,17 @@ bool Ghost::isCollided(tagPlayer &p)
         return false;
     float x, y, z;
     p.get_pos(x, y, z);
-    if ((pos_x + P_RADIUS) < (x - P_RADIUS)) //If arro is to left of playr
+    if ((pos_x + P_RADIUS) < (x - P_RADIUS)) //If Ghost is to left of playr
         return false;
-    if ((pos_x - P_RADIUS) > (x + P_RADIUS)) // If arrow is to right of player
+    if ((pos_x - P_RADIUS) > (x + P_RADIUS)) // If Ghost is to right of player
         return false;
-    if ((pos_y + P_RADIUS) < (y - P_RADIUS)) // If arrow is below player
+    if ((pos_y + P_RADIUS) < (y - P_RADIUS)) // If Ghost is below player
         return false;
-    if ((pos_y - P_RADIUS) > (y + P_RADIUS)) // If Arrow is above player  (NOT POSSIBLE THOUGH)
+    if ((pos_y - P_RADIUS) > (y + P_RADIUS)) // If Ghost is above player  (NOT POSSIBLE THOUGH)
         return false;
-    if ((pos_z + P_RADIUS) < (z - P_RADIUS)) // If Arrow is in front of player (into screen)
+    if ((pos_z + P_RADIUS) < (z - P_RADIUS)) // If Ghost is in front of player (into screen)
         return false;
-    if ((pos_z) > (z + P_RADIUS)) // If arrow is behind player  (out of the screen)
+    if ((pos_z) > (z + P_RADIUS)) // If Ghost is behind player  (out of the screen)
         return false;
     //Otherwise it is a collision!!
     return true;

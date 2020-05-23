@@ -30,35 +30,6 @@ typedef enum tagGameErrors
     */
 }GameErrors;
 
-
-
-typedef class tagArrow
-{
-    float pos_x,pos_y,pos_z;
-    float xVel,yVel,zVel;
-    int   my_lane;
-    bool  isAlive;
-public:
-    tagArrow(int lane);
-
-    //Some getters and setters
-    bool get_Alive();
-    void get_pos(float& x,float& y,float& z);
-    int  get_lane();
-    void set_pos(float x,float y,float z,bool bound_to_lane = true);
-    void set_vel(float xv,float yv,float zv);
-    void set_Alive(bool iA);
-    void set_lane(int lane);
-
-    void display();
-    void update();
-
-    // return true if arrow collided with player
-    bool isCollided(tagPlayer& p);
-
-}Arrow;
-
-
 typedef struct tagCamera
 {
     float x,y,z;
@@ -66,21 +37,5 @@ typedef struct tagCamera
     float a_x,a_y,a_z;                // angle around which axis
     tagCamera();
 }Camera;
-
-typedef class tagDonut
-{
-    float pos_x,pos_y,pos_z;
-    bool isAlive;
-public:
-    tagDonut();
-    bool taken(Player player);
-    void display();
-
-    // Some getters and setters
-    void set_pos(float x,float y,float z);
-    void set_Alive(bool alive);
-    bool get_Alive();
-    void get_pos(float& x,float& y,float& z);
-}Donut;
 
 #endif // __MYTYPES_H__

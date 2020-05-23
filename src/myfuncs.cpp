@@ -25,9 +25,6 @@ Camera global_Camera;
 Feed *feeds[MAX_FEED * MAX_FEED];
 
 Player *lifes_player[P_MAX_HEALTH];
-//Arrow *arrows[MAX_LANES];
-
-//Donut donut;
 
 GameStates global_GameState = GSMenu;
 GameErrors global_Error = GE_NO_ERROR;
@@ -55,31 +52,6 @@ void init_feed(Feed *feed, float x, float y, float z)
         feed->set_pos(x, y, z);
         n_feed++;
     }
-}
-
-void init_arrow(Arrow *arr)
-{
-    int n = rand() % LVL_NUM_RAND;   // Just a random number
-    if (n > LVL_NUM_PROB[level - 1]) // Use some probability criterion to decide when to update the Arrow
-        return;
-    arr->set_pos(0, 0.2, -(BOARD_SIZE / 2)); //Just y and z co-ords matter
-    arr->set_vel(0, 0, ARR_VEL_Z * (1.0f + (float)(level - 1) * 0.6f));
-    arr->set_Alive(true);
-}
-
-void init_donut(Donut &dnt)
-{
-    int n = rand() % D_MAX_NUM;
-    if (n > D_NUM_PROB)
-        return;
-    float x = -(BOARD_SIZE / 2) + D_OUT_RADIUS + (rand() % (int)BOARD_SIZE);
-    if (x > ((BOARD_SIZE / 2) - D_OUT_RADIUS))
-        x = (BOARD_SIZE / 2) - D_OUT_RADIUS;
-    float z = -(BOARD_SIZE / 4) + D_OUT_RADIUS + (rand() % (int)BOARD_SIZE);
-    if (z > ((BOARD_SIZE / 2) - D_OUT_RADIUS))
-        z = (BOARD_SIZE / 2) - D_OUT_RADIUS;
-    dnt.set_pos(x, D_OUT_RADIUS / 2, z);
-    dnt.set_Alive(true);
 }
 
 void update_vars(int n)
@@ -134,56 +106,9 @@ void update_vars(int n)
         {
             if (feeds[i]->taken(global_MainPlayer))
             {
-                points += POINTS_ON_ONE_DONUT;
+                points += POINTS_ON_ONE_FEED;
             }
         }
-
-        /*
-        //Arrows
-        float x,y,z;
-        for(int i=0;i<MAX_LANES;++i)
-        {
-            if(arrows[i]->isCollided(global_MainPlayer))
-            {
-                arrows[i
-                
-                ]->set_Alive(false);
-                health -= P_DEDUCT_H_ON_ONE_ARROW;
-                if(health<=0.0f)
-                {
-                    cancontinue = false;
-                    won = false;
-                    key(27,0,0);
-                }
-            }
-            arrows[i]->update();
-            if(arrows[i]->get_Alive() == false)
-                init_arrow(arrows[i]);
-            else
-            {
-                arrows[i]->get_pos(x,y,z);
-                if(z>(BOARD_SIZE/2))
-                {
-                    arrows[i]->set_Alive(false);
-                    points += POINTS_ON_ONE_ARROW;
-                }
-            }
-        }
-        */
-        //Donut
-        /*
-        if (donut.get_Alive() == false)
-        {
-            init_donut(donut);
-        }
-        else
-        {
-            if (donut.taken(global_MainPlayer))
-            {
-                points += POINTS_ON_ONE_DONUT;
-            }
-        }*/
-
         if (POINTS_TO_PASS[level - 1] <= points)
         {
             level++;
@@ -228,7 +153,7 @@ void init_level()
     }
     for (int i = 1; i < MAX_LEVELS + 1; i++)
     {
-        POINTS_TO_PASS[i - 1] = (n_feed * POINTS_ON_ONE_DONUT * i) / 4;
+        POINTS_TO_PASS[i - 1] = (n_feed * POINTS_ON_ONE_FEED * i) / 4;
     }
 
     for (int i = 0; i < MAX_GHOST; ++i)
@@ -403,24 +328,6 @@ void draw_ground()
     glVertex3f(-(BOARD_SIZE / 2), 0, (BOARD_SIZE / 2));
     glEnd();
     glColor3f(0, 0, 1);
-    /*
-    glBegin(GL_LINES);
-    glVertex3f(-(BOARD_SIZE / 2) + (BOARD_SIZE / 8), 0.001, -(BOARD_SIZE / 2));
-    glVertex3f(-(BOARD_SIZE / 2) + (BOARD_SIZE / 8), 0.001, (BOARD_SIZE / 2));
-    glVertex3f(-(BOARD_SIZE / 2) + 2 * (BOARD_SIZE / 8), 0.001, -(BOARD_SIZE / 2));
-    glVertex3f(-(BOARD_SIZE / 2) + 2 * (BOARD_SIZE / 8), 0.001, (BOARD_SIZE / 2));
-    glVertex3f(-(BOARD_SIZE / 2) + 3 * (BOARD_SIZE / 8), 0.001, -(BOARD_SIZE / 2));
-    glVertex3f(-(BOARD_SIZE / 2) + 3 * (BOARD_SIZE / 8), 0.001, (BOARD_SIZE / 2));
-    glVertex3f(-(BOARD_SIZE / 2) + 4 * (BOARD_SIZE / 8), 0.001, -(BOARD_SIZE / 2));
-    glVertex3f(-(BOARD_SIZE / 2) + 4 * (BOARD_SIZE / 8), 0.001, (BOARD_SIZE / 2));
-    glVertex3f(-(BOARD_SIZE / 2) + 5 * (BOARD_SIZE / 8), 0.001, -(BOARD_SIZE / 2));
-    glVertex3f(-(BOARD_SIZE / 2) + 5 * (BOARD_SIZE / 8), 0.001, (BOARD_SIZE / 2));
-    glVertex3f(-(BOARD_SIZE / 2) + 6 * (BOARD_SIZE / 8), 0.001, -(BOARD_SIZE / 2));
-    glVertex3f(-(BOARD_SIZE / 2) + 6 * (BOARD_SIZE / 8), 0.001, (BOARD_SIZE / 2));
-    glVertex3f(-(BOARD_SIZE / 2) + 7 * (BOARD_SIZE / 8), 0.001, -(BOARD_SIZE / 2));
-    glVertex3f(-(BOARD_SIZE / 2) + 7 * (BOARD_SIZE / 8), 0.001, (BOARD_SIZE / 2));
-    glEnd();
-    */
     glPopMatrix();
 }
 

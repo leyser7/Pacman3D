@@ -31,8 +31,7 @@ using namespace std;
 #define  MAX_FEED        17
 #define  MAX_GHOST       3
 #define  LVL_NUM_RAND     1000
-#define  POINTS_ON_ONE_ARROW  1
-#define  POINTS_ON_ONE_DONUT  20
+#define  POINTS_ON_ONE_FEED  20
 #define  MAX_LEVELS    4
 
 //const int POINTS_TO_PASS[MAX_LEVELS] = {1445,1445*2,1445*3,1445*4};
@@ -98,28 +97,6 @@ const int LVL_NUM_PROB[MAX_LEVELS] = {22,17,14,10};
 //FEED Descriptors
 #define FEED_RADIUS    0.09f 
 
-//Color for arrows
-#define CLR_ARR_R      0.2f
-#define CLR_ARR_G      0.3f
-#define CLR_ARR_B      0.9f
-
-//Arrow Descriptors
-#define ARR_BASE      0.25f
-#define ARR_HEIGHT    0.35f
-#define ARR_SLICES    16
-#define ARR_STACKS    16
-#define ARR_VEL_Z     0.05f
-
-//Donut Descriptors
-#define D_IN_RADIUS      0.08f
-#define D_OUT_RADIUS     0.18f
-#define D_RGB_R       0.5f
-#define D_RGB_G       0.1f
-#define D_RGB_B       0.6f
-#define D_SIDES      16
-#define D_RINGS      16
-#define D_MAX_NUM    1000
-#define D_NUM_PROB   10
 
 const GLfloat light_ambient[]  = { 0.0f, 0.0f, 0.0f, 1.0f };
 const GLfloat light_diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };

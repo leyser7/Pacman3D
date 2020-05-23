@@ -22,7 +22,7 @@ bool Feed::taken(Player player)
     float x, y, z;
     player.get_pos(x, y, z);
     float d = dist(pos_x, pos_y, pos_z, x, y, z);
-    if (d <= (P_RADIUS + D_OUT_RADIUS))
+    if (d <= (P_RADIUS + FEED_RADIUS))
     {
         isAlive = false;
         return true;
