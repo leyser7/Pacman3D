@@ -1,7 +1,8 @@
-# Pacman3D
-pacman 3d para clase programacion en la maestria del ITM
+# Pacman3D C++
 
-INSTALL GLU, GLUT and GL
+Pacman 3d para clase de programacion en la maestria del ITM
+
+INSTALL GLU, GLUT and OpenGL
 
 ## RUN COMMAND
 make clean && make && ./pacman
