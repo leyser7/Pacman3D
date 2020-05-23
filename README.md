@@ -11,7 +11,9 @@ make clean && make && ./pacman
 ### GAME ENGINE CREDITS:
 
 Abhijeet Patil
+
 Abhinav Tripathi
+
 URL : https://github.com/genuinelucifer/ball_rush
 
 
