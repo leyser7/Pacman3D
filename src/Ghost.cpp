@@ -12,6 +12,9 @@ Ghost::Ghost()
     direction[2] = 'a';
     direction[3] = 'd';
     n_dir = 0;
+    xVel = G_X_VEL;
+    yVel = G_Y_VEL_MAX;
+    zVel = G_Z_VEL;
 }
 
 bool Ghost::isCollided(tagPlayer &p)
@@ -51,65 +54,47 @@ void Ghost::display()
     if (!isAlive)
         return;
     glPushMatrix();
-    glColor3f(0, 0, 1);
-    // mejor endendimiento
+    glColor3f(color_r, color_g, color_b);
+    // mejor entendimiento z by x
     glTranslatef(pos_z, pos_y, pos_x);
     glTranslatef(0, P_RADIUS / 2, 0);
     glutSolidSphere(P_RADIUS, P_SLICES, P_STACKS);
     glPopMatrix();
 }
 
-void Ghost::update(tagPlayer &p, Wall **walls)
+void Ghost::update(tagPlayer &p, Wall **walls, bool attack)
 {
     if (!isAlive)
         return;
-    float x, y, z;
-    p.get_pos(x, y, z);
-
-    /*
-    if ((pos_x - P_RADIUS) > (x + P_RADIUS)) // If Ghost w is to right of player
-        return false;
-    if ((pos_y + P_RADIUS) < (y - P_RADIUS)) // If Ghost w is below player
-        return false;
-    if ((pos_y - P_RADIUS) > (y + P_RADIUS)) // If Ghost is above player  (NOT POSSIBLE THOUGH)
-        return false;
-    if ((pos_z + P_RADIUS) < (z - P_RADIUS)) // If Ghost is in front of player (into screen)
-        return false;
-    if ((pos_z) > (z + P_RADIUS)) // If Ghost is behind player  (out of the screen)
-        return false;
-    */
-
-    float temp0 = pos_x - x;
-    float temp1 = pos_z - z;
-    if (abs(temp0) > abs(temp1))
+    if (attack)
     {
-        if (temp0 > 0 && !isObstacle('a', walls))
+        float x, y, z;
+        p.get_pos(x, y, z);
+        float temp0 = pos_x - x;
+        float temp1 = pos_z - z;
+        if (abs(temp0) > abs(temp1))
         {
-            n_dir = 2;
+            if (temp0 > 0 && !isObstacle('a', walls))
+            {
+                n_dir = 2;
+            }
+            else if (temp0 < 0 && !isObstacle('d', walls))
+            {
+                n_dir = 3;
+            }
         }
-        else if (temp0 < 0 && !isObstacle('d', walls))
+        else
         {
-            n_dir = 3;
+            if (temp1 > 0 && !isObstacle('s', walls))
+            {
+                n_dir = 1;
+            }
+            else if (temp1 < 0 && !isObstacle('w', walls))
+            {
+                n_dir = 0;
+            }
         }
     }
-    else
-    {
-        if (temp1 > 0 && !isObstacle('s', walls))
-        {
-            n_dir = 1;
-        }
-        else if (temp1 < 0 && !isObstacle('w', walls))
-        {
-            n_dir = 0;
-        }
-    }
-    //isObstacle('w', walls);
-    /*
-    if ()
-    {
-        n_dir = 0;
-    }
-    */
     if (!handle_input(direction[n_dir], walls))
     {
         if (direction[n_dir] == 'w' || direction[n_dir] == 's')

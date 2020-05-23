@@ -9,10 +9,12 @@ tagPlayer::tagPlayer()
     pos_x = P_START_Z;
     pos_y = P_START_Y;
     pos_z = P_START_X;
-
-    xVel = 0;
+    color_r = P_RGB_R;
+    color_g = P_RGB_G;
+    color_b = P_RGB_B;
+    xVel = P_X_VEL;
     yVel = 0;
-    zVel = 0;
+    zVel = P_Z_VEL;
     isjumping = false;
 }
 
@@ -24,7 +26,7 @@ bool tagPlayer::handle_input(unsigned char key, Wall **walls)
     switch (key)
     {
     case 'd':
-        pos_x += P_X_VEL;
+        pos_x += xVel;
         if (pos_x > ((BOARD_SIZE / 2.0) - (P_RADIUS)))
         {
             isMoving = false;
@@ -42,7 +44,7 @@ bool tagPlayer::handle_input(unsigned char key, Wall **walls)
         break;
 
     case 'a':
-        pos_x -= P_X_VEL;
+        pos_x -= xVel;
         if ((-pos_x) > ((BOARD_SIZE / 2.0) - (P_RADIUS)))
         {
             isMoving = false;
@@ -60,7 +62,7 @@ bool tagPlayer::handle_input(unsigned char key, Wall **walls)
         break;
 
     case 's':
-        pos_z -= P_Z_VEL;
+        pos_z -= zVel;
         if ((-pos_z) > ((BOARD_SIZE / 2.0) - (P_RADIUS)))
         {
             isMoving = false;
@@ -79,7 +81,7 @@ bool tagPlayer::handle_input(unsigned char key, Wall **walls)
         break;
 
     case 'w':
-        pos_z += P_Z_VEL;
+        pos_z += zVel;
         if (pos_z > ((BOARD_SIZE / 2.0) - (P_RADIUS)))
         {
             isMoving = false;
@@ -109,9 +111,9 @@ bool tagPlayer::handle_input(unsigned char key, Wall **walls)
 
 void tagPlayer::update()
 {
-    //  pos_x += xVel;
+    //pos_x += xVel;
     pos_y += yVel;
-    //  pos_z += zVel;
+    //pos_z += zVel;
 
     if (isjumping)
     {
@@ -129,7 +131,7 @@ void tagPlayer::update()
 void tagPlayer::display()
 {
     glPushMatrix();
-    glColor3f(P_RGB_R, P_RGB_G, P_RGB_B);
+    glColor3f(color_r, color_g, color_b);
     // mejor endendimiento
     glTranslatef(pos_z, pos_y, pos_x);
     glTranslatef(0, P_RADIUS / 2, 0);
@@ -149,4 +151,11 @@ void tagPlayer::set_pos(float x, float y, float z)
     pos_x = x;
     pos_y = y;
     pos_z = z;
+}
+
+void tagPlayer::set_color(float r, float g, float b)
+{
+    color_r = r;
+    color_g = g;
+    color_b = b;
 }

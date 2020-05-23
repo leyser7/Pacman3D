@@ -14,7 +14,7 @@ public :
     void set_Alive(bool iA);
     bool get_Alive();
     void display();
-    void update(tagPlayer &p, Wall **walls);
+    void update(tagPlayer &p, Wall **walls, bool attack);
     bool isObstacle(unsigned char key, Wall **walls);
 };
 

@@ -5,28 +5,11 @@
 Feed::Feed()
 {
     isAlive = false;
-}
-/*
-bool Feed::get_Alive()
-{
-    return isAlive;
-}
-x
-void Feed::get_pos(float &x, float &y, float &z)
-{
-    x = pos_x;
-    y = pos_y;
-    z = pos_z;
+    color_r = CLR_FEED_R;
+    color_g = CLR_FEED_G;
+    color_b = CLR_FEED_B;
 }
 
-
-void Feed::set_pos(float x, float y, float z)
-{
-    pos_x = x;
-    pos_y = y;
-    pos_z = z;
-}
-*/
 void Feed::set_Alive(bool alive)
 {
     isAlive = alive;
@@ -52,7 +35,7 @@ void Feed::display()
     if (!isAlive)
         return;
     glPushMatrix();
-    glColor3f(CLR_FEED_R, CLR_FEED_G, CLR_FEED_B);
+    glColor3f(color_r, color_g, color_b);
     // mejor endendimiento
     glTranslatef(pos_z, pos_y, pos_x);
     glTranslatef(0, FEED_RADIUS / 2, 0);

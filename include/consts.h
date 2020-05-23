@@ -29,7 +29,7 @@ using namespace std;
 #define  MAX_LANES       8
 #define  MAX_WALL        43
 #define  MAX_FEED        17
-#define  MAX_GHOST       1
+#define  MAX_GHOST       3
 #define  LVL_NUM_RAND     1000
 #define  POINTS_ON_ONE_ARROW  1
 #define  POINTS_ON_ONE_DONUT  20
@@ -57,14 +57,20 @@ const int LVL_NUM_PROB[MAX_LEVELS] = {22,17,14,10};
 #define  P_X_VEL         0.08f  //0.13f
 #define  P_Y_VEL_MAX     0.40f  //0.40f
 #define  P_Z_VEL         0.09f  //0.14f
-#define  P_MAX_HEALTH    BOARD_SIZE/2.0
-#define  P_DEDUCT_H_ON_ONE_ARROW         P_MAX_HEALTH/10.0
+#define  P_MAX_HEALTH    3
+#define  P_DEDUCT_GHOST       1
+
+// Ghost 
+#define  G_X_VEL         0.03f  //0.13f
+#define  G_Y_VEL_MAX     0.40f  //0.40f
+#define  G_Z_VEL         0.03f  //0.14f
+
 
 #define GRAVITY          -0.04f
 
 //Color components to set player's colour  Range:(0-1)
 #define  P_RGB_R    1
-#define  P_RGB_G    0
+#define  P_RGB_G    1
 #define  P_RGB_B    0
 
 //Number of horizontal pieces player is made up of

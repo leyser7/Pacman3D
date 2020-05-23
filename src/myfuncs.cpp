@@ -24,6 +24,7 @@ Camera global_Camera;
 
 Feed *feeds[MAX_FEED * MAX_FEED];
 
+Player *lifes_player[P_MAX_HEALTH];
 //Arrow *arrows[MAX_LANES];
 
 //Donut donut;
@@ -34,21 +35,16 @@ GameErrors global_Error = GE_NO_ERROR;
 bool played = false; // Stores if game has been played atleast once
 bool won = false;
 bool cancontinue = false;
+bool attack = false;
 float menu_sel_angle = 0.0;
 float controls_angle = 0.0f;
 float credits_angle = 0.0f;
 
-int cont = 0;
 void init_ghost(Ghost *ghost)
 {
-
-    //int n = rand() % LVL_NUM_RAND;   // Just a random number
-    //if (n > LVL_NUM_PROB[level - 1]) // Use some probability criterion to decide when to update the Arrow
-    //    return;
-    ghosts[0]->set_pos(0, P_START_Y, 0.175 * 1);
-    //ghost->set_vel(0, 0, ARR_VEL_Z * (1.0f + (float)(level - 1) * 0.6f));
+    int pos_x = rand() % MAX_GHOST;
+    ghost->set_pos(0.175 * 2 * pos_x, P_START_Y, 0.175 * 2);
     ghost->set_Alive(true);
-    cont++;
 }
 
 void init_feed(Feed *feed, float x, float y, float z)
@@ -117,10 +113,10 @@ void update_vars(int n)
         //Ghost
         for (size_t i = 0; i < MAX_GHOST; i++)
         {
-            if (ghosts[0]->isCollided(global_MainPlayer))
+            if (ghosts[i]->isCollided(global_MainPlayer))
             {
-                ghosts[0]->set_Alive(false);
-                health -= P_DEDUCT_H_ON_ONE_ARROW;
+                ghosts[i]->set_Alive(false);
+                health -= P_DEDUCT_GHOST;
                 if (health <= 0.0f)
                 {
                     cancontinue = false;
@@ -128,7 +124,7 @@ void update_vars(int n)
                     key(27, 0, 0);
                 }
             }
-            ghosts[i]->update(global_MainPlayer, walls);
+            ghosts[i]->update(global_MainPlayer, walls, attack);
             if (ghosts[i]->get_Alive() == false)
                 init_ghost(ghosts[i]);
         }
@@ -197,6 +193,10 @@ void update_vars(int n)
                 won = true;
                 key(27, 0, 0);
             }
+            if (level == MAX_LEVELS)
+            {
+                attack = true;
+            }
         }
         break;
 
@@ -214,10 +214,10 @@ void init_level()
     points = 0;
     health = P_MAX_HEALTH;
     n_feed = 0;
-    for (int i = 0; i < MAX_LANES; ++i)
+    attack = false;
+    for (size_t i = 0; i < P_MAX_HEALTH; i++)
     {
-        //arrows[i]->set_Alive(false);
-        //init_arrow(arrows[i]);
+        lifes_player[i]->set_pos(-BOARD_SIZE / 2 + WALL_W * 2 * i + WALL_W, P_START_Y, -BOARD_SIZE / 2 - WALL_W);
     }
     for (int i = 0; i < MAX_FEED; ++i)
     {
@@ -329,19 +329,26 @@ void init_Rendering()
         global_Error = GE_CHARSET_ERROR;
         exit((int)global_Error);
     }
-    ghosts[0] = new Ghost;
-    for (int i = 0; i < MAX_LANES; ++i)
+
+    srand(time(NULL)); // seed the random number generator
+
+    for (size_t i = 0; i < MAX_GHOST; i++)
     {
-        //arrows[i] = new Arrow(i);
+        float r = (rand() % 100) / 100.0;
+        float g = (rand() % 100) / 100.0;
+        float b = (rand() % 100) / 100.0;
+        ghosts[i] = new Ghost;
+        ghosts[i]->set_color(r, g, b);
     }
     for (int i = 0; i < MAX_FEED * MAX_FEED; ++i)
     {
         feeds[i] = new Feed();
     }
-
+    for (int i = 0; i < P_MAX_HEALTH; ++i)
+    {
+        lifes_player[i] = new Player();
+    }
     init_wall();
-
-    srand(time(NULL)); // seed the random number generator
 
     glClearColor(CLR_CLR_R, CLR_CLR_G, CLR_CLR_B, CLR_CLR_A);
     //  glEnable(GL_CULL_FACE);
@@ -452,56 +459,11 @@ void draw_texts()
 
 void draw_health()
 {
-    glPushMatrix();
-    glColor3f(0, 0, 1);
-    glTranslatef(0, 0, 0);
-    glScalef(2.0, 1.0, 2.0);
-    glutWireCube(1.01);
-    glPopMatrix();
-
-    glPushMatrix();
-    glColor3f(0.1, 1, 0.1);
-    glTranslatef(0, 0, 0);
-    glScalef(2.0, 1.0, 2.0);
-    glutSolidCube(1.0);
-    glPopMatrix();
-    /*
-    glBegin(GL_QUADS);
-    glShadeModel(GL_SMOOTH);
-    */
-    /* Floor /
-glVertex3f(-1,-1,-1);
-glVertex3f(1,-1,-1);
-glVertex3f(1,-1,1);
-glVertex3f(-1,-1,1);
-/ Ceiling /
-glVertex3f(-1,1,-1);
-glVertex3f(1,1,-1);
-glVertex3f(1,1,1);
-glVertex3f(-1,1,1);
-/ Walls */
-    /*
-    glVertex3f(-1, -1, 1);
-    glVertex3f(1, -1, 1);
-    glVertex3f(1, 1, 1);
-    glVertex3f(-1, 1, 1);
-
-    glVertex3f(-1, -1, -1);
-    glVertex3f(1, -1, -1);
-    glVertex3f(1, 1, -1);
-    glVertex3f(-1, 1, -1);
-
-    glVertex3f(1, 1, 1);
-    glVertex3f(1, -1, 1);
-    glVertex3f(1, -1, -1);
-    glVertex3f(1, 1, -1);
-
-    glVertex3f(-1, 1, 1);
-    glVertex3f(-1, -1, 1);
-    glVertex3f(-1, -1, -1);
-    glVertex3f(-1, 1, -1);
-    glEnd();
-    */
+    for (size_t i = 0; i < P_MAX_HEALTH; i++)
+    {
+        if (i < health)
+            lifes_player[i]->display();
+    }
 }
 
 void playing_display()
@@ -516,7 +478,7 @@ void playing_display()
 
     draw_texts();
     draw_ground();
-    //draw_health();
+    draw_health();
     global_MainPlayer.display();
     for (int i = 0; i < MAX_WALL; ++i)
     {
@@ -560,7 +522,7 @@ void controls_display()
     glPushMatrix();
     glTranslatef(-1.1, 0, 0);
     glScalef(0.6, 0.3, 0.8);
-    t3dDraw3D("Use Spacebar to jump.", -1, 0, 0.2);
+    //t3dDraw3D("Use Spacebar to jump.", -1, 0, 0.2);
     glPopMatrix();
     glPushMatrix();
     glTranslatef(-1.1, -1.5, 0);
@@ -591,15 +553,15 @@ void credits_display()
     glPushMatrix();
     glColor3f(0.9, 0.8, 0.1);
     glTranslatef(-1.1, 0.5, 0);
-    glRotatef(8 * sin(credits_angle), 0.1, 0.1, 1.0);
+    glRotatef(8 * sin(-credits_angle), 0.1, 0.1, 1.0);
     glScalef(0.5, 0.6, 0.6);
-    t3dDraw3D("CONCEPT", -1, 0, 0.2);
+    t3dDraw3D("PROGRAMMER", -1, 0, 0.2);
     glPopMatrix();
     glPushMatrix();
     glTranslatef(-1.1, -1.5, 0);
     glRotatef(-8 * sin(credits_angle), 0.1, 0.1, 1.0);
     glScalef(0.4, 0.6, 0.6);
-    t3dDraw3D("PROGRAMMER", -1, 0, 0.2);
+    t3dDraw3D("GAME ENGINE \nCONCEPT", -1, 0, 0.2);
     glPopMatrix();
     glPopMatrix();
 
@@ -608,13 +570,13 @@ void credits_display()
     glTranslatef(8.0, 0.5, 0);
     glRotatef(8 * sin(credits_angle), -0.1, -0.1, -1.0);
     glScalef(0.6, 0.5, 0.6);
-    t3dDraw3D("Abhijeet Patil", 1, 0, 0.2);
+    t3dDraw3D("Cristian Alzate", 1, 0, 0.2);
     glPopMatrix();
     glPushMatrix();
     glTranslatef(8.0, -1.5, 0);
-    glRotatef(-8 * sin(credits_angle), -0.1, -0.1, -1.0);
+    glRotatef(-8 * sin(-credits_angle), -0.1, -0.1, -1.0);
     glScalef(0.50, 0.5, 0.6);
-    t3dDraw3D("Abhinav Tripathi", 1, 0, 0.2);
+    t3dDraw3D("Abhinav Tripathi\nAbhijeet Patil", 1, 0, 0.2);
     glPopMatrix();
     glPopMatrix();
 }

@@ -16,10 +16,11 @@ public :
 
     void get_pos(float& x,float& y,float& z);
     void set_pos(float  x,float  y,float  z);
+    void set_color(float r, float g, float b);
 protected:
     float pos_x,pos_y,pos_z;
     float xVel,yVel,zVel;
-
+    float color_r, color_g, color_b;
 }Player;
 
 #endif // __PLAYER_H__
