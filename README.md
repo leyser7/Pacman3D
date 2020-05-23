@@ -7,10 +7,12 @@ INSTALL GLU, GLUT and GL
 make clean && make && ./pacman
 
 
-GAME ENGINE CREDITS:
+### GAME ENGINE CREDITS:
+
 Abhijeet Patil
 Abhinav Tripathi
 ___________________________________________________
-**NOT FOR REDISTRIBUTION!!!
+NOT FOR REDISTRIBUTION!
 It is a punishable act if done intentionally or unintentionally without prior permission of the programmers
+
 URL : https://github.com/genuinelucifer/ball_rush
