@@ -3,11 +3,13 @@
 #include "Player.h"
 #include "Ghost.h"
 #include "Wall.h"
-
+#include "Feed.h"
 #include <iostream>
 
 int screen_w = 640, screen_h = 480;
 
+int POINTS_TO_PASS[MAX_LEVELS];
+int n_feed = 0;
 int level;    //level
 int points;   //Points
 float health; //Health
@@ -19,6 +21,9 @@ Player global_MainPlayer;
 Ghost *ghosts[MAX_GHOST];
 
 Camera global_Camera;
+
+Feed *feeds[MAX_FEED * MAX_FEED];
+
 //Arrow *arrows[MAX_LANES];
 
 //Donut donut;
@@ -36,16 +41,25 @@ float credits_angle = 0.0f;
 int cont = 0;
 void init_ghost(Ghost *ghost)
 {
-    
+
     //int n = rand() % LVL_NUM_RAND;   // Just a random number
     //if (n > LVL_NUM_PROB[level - 1]) // Use some probability criterion to decide when to update the Arrow
     //    return;
-    ghosts[0]->set_pos(0, P_START_Y, 0.175*1 );
+    ghosts[0]->set_pos(0, P_START_Y, 0.175 * 1);
     //ghost->set_vel(0, 0, ARR_VEL_Z * (1.0f + (float)(level - 1) * 0.6f));
     ghost->set_Alive(true);
     cont++;
 }
 
+void init_feed(Feed *feed, float x, float y, float z)
+{
+    if (!feed->isWall(x, z, walls))
+    {
+        feed->set_Alive(true);
+        feed->set_pos(x, y, z);
+        n_feed++;
+    }
+}
 
 void init_arrow(Arrow *arr)
 {
@@ -100,26 +114,34 @@ void update_vars(int n)
     case GSPlaying:
         played = true;
         global_MainPlayer.update();
-        //Ghost 
-        
-        if(ghosts[0]->isCollided(global_MainPlayer)){
-            std::cout<<"here ghost"<<endl;
-            ghosts[0]->set_Alive(false);
+        //Ghost
+        for (size_t i = 0; i < MAX_GHOST; i++)
+        {
+            if (ghosts[0]->isCollided(global_MainPlayer))
+            {
+                ghosts[0]->set_Alive(false);
                 health -= P_DEDUCT_H_ON_ONE_ARROW;
-                if(health<=0.0f)
+                if (health <= 0.0f)
                 {
                     cancontinue = false;
                     won = false;
-                    key(27,0,0);
+                    key(27, 0, 0);
                 }
+            }
+            ghosts[i]->update(global_MainPlayer, walls);
+            if (ghosts[i]->get_Alive() == false)
+                init_ghost(ghosts[i]);
         }
-        ghosts[0]->update(global_MainPlayer, walls);
-        if(ghosts[0]->get_Alive() == false)
-                init_ghost(ghosts[0]);
-        else {
 
+        //feed
+        for (size_t i = 0; i < MAX_FEED * MAX_FEED; i++)
+        {
+            if (feeds[i]->taken(global_MainPlayer))
+            {
+                points += POINTS_ON_ONE_DONUT;
+            }
         }
-        
+
         /*
         //Arrows
         float x,y,z;
@@ -191,16 +213,104 @@ void init_level()
     level = 1;
     points = 0;
     health = P_MAX_HEALTH;
+    n_feed = 0;
     for (int i = 0; i < MAX_LANES; ++i)
     {
         //arrows[i]->set_Alive(false);
         //init_arrow(arrows[i]);
     }
-    init_ghost(ghosts[0]);
+    for (int i = 0; i < MAX_FEED; ++i)
+    {
+        for (int j = 0; j < MAX_FEED; j++)
+        {
+            init_feed(feeds[i * MAX_FEED + j], -3 + WALL_W + WALL_W * 2 * i, 0, -3 + WALL_W + WALL_W * 2 * j);
+        }
+    }
+    for (int i = 1; i < MAX_LEVELS + 1; i++)
+    {
+        POINTS_TO_PASS[i - 1] = (n_feed * POINTS_ON_ONE_DONUT * i) / 4;
+    }
+
+    for (int i = 0; i < MAX_GHOST; ++i)
+    {
+        init_ghost(ghosts[0]);
+    }
     global_MainPlayer.set_pos(P_START_X, P_START_Y, P_START_Z);
-
 }
+void init_wall()
+{
+    float diametro = WALL_W * 2.0f;
+    //left down
+    walls[0] = new Wall(diametro * -7.0f, diametro * -7.0f, diametro * 6.0f, diametro);
+    walls[1] = new Wall(diametro * -4.0f, diametro * -6.0f, diametro, diametro * 2.0f);
 
+    walls[2] = new Wall(diametro * -6.0f, diametro * -5.0f, diametro, diametro * 3.0f);
+    walls[3] = new Wall(diametro * -7.0f, diametro * -3.0f, diametro, diametro);
+
+    walls[4] = new Wall(diametro * -8.0f, diametro * -5.0f, diametro, diametro);
+
+    walls[5] = new Wall(diametro * -4.0f, diametro * -3.0f, diametro * 3.0f, diametro);
+
+    //rigth down
+
+    walls[6] = new Wall(diametro * 2.0f, diametro * -7.0f, diametro * 6.0f, diametro);
+    walls[7] = new Wall(diametro * 4.0f, diametro * -6.0f, diametro, diametro * 2.0f);
+
+    walls[8] = new Wall(diametro * 6.0f, diametro * -5.0f, diametro, diametro * 3.0f);
+    walls[9] = new Wall(diametro * 7.0f, diametro * -3.0f, diametro, diametro);
+
+    walls[10] = new Wall(diametro * 8.0f, diametro * -5.0f, diametro, diametro);
+
+    walls[11] = new Wall(diametro * 2.0f, diametro * -3.0f, diametro * 3.0f, diametro);
+
+    // center
+    walls[12] = new Wall(diametro * -2.0f, diametro * -5.0f, diametro * 5.0f, diametro);
+    walls[13] = new Wall(0, diametro * -7.0f, diametro, diametro * 2.0f);
+
+    walls[14] = new Wall(diametro * -2.0f, diametro * -1.0f, diametro * 5.0f, diametro);
+    walls[15] = new Wall(0, diametro * -3.0f, diametro, diametro * 2.0f);
+
+    walls[16] = new Wall(diametro * -2.0f, diametro * 5.0f, diametro * 5.0f, diametro);
+    walls[17] = new Wall(0, diametro * 3.0f, diametro, diametro * 2.0f);
+
+    walls[18] = new Wall(0, diametro * 7.0f, diametro, diametro * 2.0f);
+
+    walls[19] = new Wall(diametro * -4.0f, diametro * -1.0f, diametro, diametro * 2.0f);
+    walls[20] = new Wall(diametro * 4.0f, diametro * -1.0f, diametro, diametro * 2.0f);
+
+    walls[21] = new Wall(diametro * -4.0f, diametro * 2.0f, diametro, diametro * 4.0f);
+    walls[22] = new Wall(diametro * -3.0f, diametro * 3.0f, diametro * 2.0f, diametro);
+
+    walls[23] = new Wall(diametro * 4.0f, diametro * 2.0f, diametro, diametro * 4.0f);
+    walls[24] = new Wall(diametro * 2.0f, diametro * 3.0f, diametro * 2.0f, diametro);
+
+    walls[25] = new Wall(diametro * -7.0f, diametro * 5.0f, diametro * 2.0f, diametro);
+    walls[26] = new Wall(diametro * 6.0f, diametro * 5.0f, diametro * 2.0f, diametro);
+
+    walls[27] = new Wall(diametro * -7.0f, diametro * 7.0f, diametro * 2.0f, diametro);
+    walls[28] = new Wall(diametro * 6.0f, diametro * 7.0f, diametro * 2.0f, diametro);
+
+    walls[29] = new Wall(diametro * -4.0f, diametro * 7.0f, diametro * 3.0f, diametro);
+    walls[30] = new Wall(diametro * 2.0f, diametro * 7.0f, diametro * 3.0f, diametro);
+    // laterales
+    walls[31] = new Wall(diametro * -8.0f, diametro * -1.0f, diametro * 3.0f, diametro / 2.0f);
+    walls[32] = new Wall(diametro * 6.0f, diametro * -1.0f, diametro * 3.0f, diametro / 2.0f);
+
+    walls[33] = new Wall(diametro * -8.0f, diametro * 1.0f / 2.0f, diametro * 3.0f, diametro / 2.0f);
+    walls[34] = new Wall(diametro * 6.0f, diametro * 1.0f / 2.0f, diametro * 3.0f, diametro / 2.0f);
+
+    walls[35] = new Wall(diametro * -8.0f, diametro * 2.0f, diametro * 3.0f, diametro / 2.0f);
+    walls[36] = new Wall(diametro * 6.0f, diametro * 2.0f, diametro * 3.0f, diametro / 2.0f);
+
+    walls[37] = new Wall(diametro * -8.0f, diametro * 3.0f + diametro / 2.0f, diametro * 3.0f, diametro / 2.0f);
+    walls[38] = new Wall(diametro * 6.0f, diametro * 3.0f + diametro / 2.0f, diametro * 3.0f, diametro / 2.0f);
+
+    walls[39] = new Wall(diametro * -6.0f + diametro / 2.0f, diametro * 2.0f, diametro / 2.0f, diametro * 2.0f);
+    walls[40] = new Wall(diametro * 6.0f, diametro * 2.0f, diametro / 2.0f, diametro * 2.0f);
+
+    walls[41] = new Wall(diametro * -6.0f + diametro / 2.0f, diametro * -1.0f, diametro / 2.0f, diametro * 2.0f);
+    walls[42] = new Wall(diametro * 6.0f, diametro * -1.0f, diametro / 2.0f, diametro * 2.0f);
+}
 //Initializes 3D rendering
 void init_Rendering()
 {
@@ -224,79 +334,12 @@ void init_Rendering()
     {
         //arrows[i] = new Arrow(i);
     }
-    //for (int i = 0; i < MAX_WALL; ++i)
-    // {
-    float diametro = WALL_W*2.0f;
-    //left down
-    walls[0] = new Wall(diametro*-7.0f, diametro*-7.0f, diametro*6.0f, diametro);
-    walls[1] = new Wall(diametro*-4.0f, diametro*-6.0f, diametro,  diametro*2.0f);
+    for (int i = 0; i < MAX_FEED * MAX_FEED; ++i)
+    {
+        feeds[i] = new Feed();
+    }
 
-    walls[2] = new Wall(diametro*-6.0f, diametro*-5.0f, diametro, diametro*3.0f);
-    walls[3] = new Wall(diametro*-7.0f, diametro*-3.0f, diametro, diametro);
-
-    walls[4] = new Wall(diametro*-8.0f, diametro*-5.0f, diametro, diametro);
-
-    walls[5] = new Wall(diametro*-4.0f, diametro*-3.0f, diametro*3.0f,  diametro);
-
-    //rigth down
-    
-    walls[6] = new Wall(diametro*2.0f, diametro*-7.0f, diametro*6.0f, diametro);
-    walls[7] = new Wall(diametro*4.0f, diametro*-6.0f, diametro,  diametro*2.0f);
-
-    walls[8] = new Wall(diametro*6.0f, diametro*-5.0f, diametro, diametro*3.0f);
-    walls[9] = new Wall(diametro*7.0f, diametro*-3.0f, diametro, diametro);
-
-    walls[10] = new Wall(diametro*8.0f, diametro*-5.0f, diametro, diametro);
-
-    walls[11] = new Wall(diametro*2.0f, diametro*-3.0f, diametro*3.0f,  diametro);
-
-    // center 
-    walls[12] = new Wall(diametro*-2.0f, diametro*-5.0f, diametro*5.0f, diametro);
-    walls[13] = new Wall(0, diametro*-7.0f, diametro,  diametro*2.0f);
-
-    walls[14] = new Wall(diametro*-2.0f, diametro*-1.0f, diametro*5.0f, diametro);
-    walls[15] = new Wall(0, diametro*-3.0f, diametro,  diametro*2.0f);
-
-    walls[16] = new Wall(diametro*-2.0f, diametro*5.0f, diametro*5.0f, diametro);
-    walls[17] = new Wall(0, diametro*3.0f, diametro,  diametro*2.0f);
-
-    walls[18] = new Wall(0, diametro*7.0f, diametro,  diametro*2.0f);
-
-    walls[19] = new Wall(diametro*-4.0f, diametro*-1.0f, diametro,  diametro*2.0f);
-    walls[20] = new Wall(diametro*4.0f, diametro*-1.0f, diametro,  diametro*2.0f);
-
-    walls[21] = new Wall(diametro*-4.0f, diametro*2.0f, diametro,  diametro*4.0f);
-    walls[22] = new Wall(diametro*-3.0f, diametro*3.0f, diametro*2.0f,  diametro);
-
-    walls[23] = new Wall(diametro*4.0f, diametro*2.0f, diametro,  diametro*4.0f);
-    walls[24] = new Wall(diametro*2.0f, diametro*3.0f, diametro*2.0f,  diametro);
-
-    walls[25] = new Wall(diametro*-7.0f, diametro*5.0f, diametro*2.0f, diametro);
-    walls[26] = new Wall(diametro*6.0f, diametro*5.0f, diametro*2.0f, diametro);
-
-    walls[27] = new Wall(diametro*-7.0f, diametro*7.0f, diametro*2.0f, diametro);
-    walls[28] = new Wall(diametro*6.0f, diametro*7.0f, diametro*2.0f, diametro);
-
-    walls[29] = new Wall(diametro*-4.0f, diametro*7.0f, diametro*3.0f, diametro);
-    walls[30] = new Wall(diametro*2.0f, diametro*7.0f, diametro*3.0f, diametro);
-    // laterales
-    walls[31] = new Wall(diametro*-8.0f, diametro*-1.0f, diametro*3.0f, diametro/2.0f);
-    walls[32] = new Wall(diametro*6.0f, diametro*-1.0f, diametro*3.0f, diametro/2.0f);
-
-    walls[33] = new Wall(diametro*-8.0f, diametro*1.0f/2.0f, diametro*3.0f, diametro/2.0f);
-    walls[34] = new Wall(diametro*6.0f, diametro*1.0f/2.0f, diametro*3.0f, diametro/2.0f);
-
-    walls[35] = new Wall(diametro*-8.0f, diametro*2.0f, diametro*3.0f, diametro/2.0f);
-    walls[36] = new Wall(diametro*6.0f, diametro*2.0f, diametro*3.0f, diametro/2.0f);
-
-    walls[37] = new Wall(diametro*-8.0f, diametro*3.0f+diametro/2.0f,diametro*3.0f, diametro/2.0f);
-    walls[38] = new Wall(diametro*6.0f, diametro*3.0f+diametro/2.0f, diametro*3.0f, diametro/2.0f);
-
-    walls[39] = new Wall(diametro*-6.0f+diametro/2.0f, diametro*2.0f, diametro/2.0f, diametro*2.0f);
-    walls[40] = new Wall(diametro*6.0f, diametro*2.0f, diametro/2.0f, diametro*2.0f);
-
-    walls[41] = new Wall(diametro*-6.0f+diametro/2.0f, diametro*-1.0f,diametro/2.0f, diametro*2.0f);
-    walls[42] = new Wall(diametro*6.0f, diametro*-1.0f, diametro/2.0f, diametro*2.0f);
+    init_wall();
 
     srand(time(NULL)); // seed the random number generator
 
@@ -386,7 +429,7 @@ void draw_texts()
 
     glPushMatrix();
     glColor3f(0, 0, 1);
-    glRotatef(-45, 0, 1, 0);
+    glRotatef(-125, 0, 1, 0);
     glTranslatef(0, 0.7, -(BOARD_SIZE / 2) - 1.5);
     glScalef(sx, 0.5, 1.0);
     t3dDraw3D(str, 0, 0, 0.2);
@@ -400,7 +443,7 @@ void draw_texts()
 
     glPushMatrix();
     glColor3f(0.8, 0, 0.4);
-    glRotatef(45, 0, 1, 0);
+    glRotatef(-45, 0, 1, 0);
     glTranslatef(0, 0.7, -(BOARD_SIZE / 2) - 1.5);
     glScalef(0.7, 0.5, 1.0);
     t3dDraw3D(str2, 0, 0, 0.2);
@@ -474,28 +517,19 @@ void playing_display()
     draw_texts();
     draw_ground();
     //draw_health();
+    global_MainPlayer.display();
     for (int i = 0; i < MAX_WALL; ++i)
     {
         walls[i]->display();
     }
-
-    global_MainPlayer.display();
-    ghosts[0]->display();
-    /*
-    float x, y, z;
-    global_MainPlayer.get_pos(x, y ,z);
-    std::cout<<"x: "<<x<<" ";
-    std::cout<<"y: "<<y<<" ";
-    std::cout<<"z: "<<z<<std::endl;
-    */
-    /*
-    for (int i = 0; i < MAX_LANES; ++i)
+    for (int i = 0; i < MAX_GHOST; ++i)
     {
-        arrows[i]->display();
+        ghosts[i]->display();
     }
-    donut.display();
-    */
-
+    for (int i = 0; i < MAX_FEED * MAX_FEED; ++i)
+    {
+        feeds[i]->display();
+    }
     cancontinue = true;
 }
 

@@ -16,7 +16,6 @@ Ghost::Ghost()
 
 bool Ghost::isCollided(tagPlayer &p)
 {
-    //std:cout<<"here ghost is collided"<<endl;
     if (!isAlive)
         return false;
     float x, y, z;
@@ -52,7 +51,7 @@ void Ghost::display()
     if (!isAlive)
         return;
     glPushMatrix();
-    glColor3f(0,0, 1);
+    glColor3f(0, 0, 1);
     // mejor endendimiento
     glTranslatef(pos_z, pos_y, pos_x);
     glTranslatef(0, P_RADIUS / 2, 0);
@@ -88,7 +87,7 @@ void Ghost::update(tagPlayer &p, Wall **walls)
         {
             n_dir = 2;
         }
-        else if(temp0< 0 && !isObstacle('d', walls))
+        else if (temp0 < 0 && !isObstacle('d', walls))
         {
             n_dir = 3;
         }
@@ -99,18 +98,12 @@ void Ghost::update(tagPlayer &p, Wall **walls)
         {
             n_dir = 1;
         }
-        else if(temp1< 0 && !isObstacle('w', walls))
+        else if (temp1 < 0 && !isObstacle('w', walls))
         {
             n_dir = 0;
         }
     }
-    /*
-   std::cout<<"posx: "<<pos_x<<std::endl;
-   std::cout<<"posy: "<<pos_y<<std::endl;
-   std::cout<<"poz: "<<pos_z<<std::endl;
-   */
     //isObstacle('w', walls);
-    //std::cout << isObstacle('w', walls)<<std::endl;
     /*
     if ()
     {

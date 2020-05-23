@@ -9,7 +9,7 @@ tagPlayer::tagPlayer()
     pos_x = P_START_Z;
     pos_y = P_START_Y;
     pos_z = P_START_X;
-    
+
     xVel = 0;
     yVel = 0;
     zVel = 0;
@@ -19,84 +19,83 @@ tagPlayer::tagPlayer()
 //Update player position based on input...
 bool tagPlayer::handle_input(unsigned char key, Wall **walls)
 {
-    //std::cout<<"x: "<<pos_x<<" ";
-    //std::cout<<"y: "<<pos_y<<" ";
-    //std::cout<<"z: "<<pos_z<<std::endl;
     float w_x, w_z, w_w, w_h;
-    bool Ismoving = true;
+    bool isMoving = true;
     switch (key)
     {
     case 'd':
         pos_x += P_X_VEL;
-        if (pos_x > ((BOARD_SIZE / 2.0) - (P_RADIUS))){
-            Ismoving = false;
+        if (pos_x > ((BOARD_SIZE / 2.0) - (P_RADIUS)))
+        {
+            isMoving = false;
             pos_x = (BOARD_SIZE / 2.0) - P_RADIUS;
         }
         for (int i = 0; i < MAX_WALL; ++i)
         {
-            walls[i]->get(w_x,w_z,w_w,w_h);
-            if (pos_x > (w_x - P_RADIUS)& pos_x < (w_x + w_w - P_RADIUS) & pos_z > (w_z-P_RADIUS) & pos_z < (w_z+w_h+P_RADIUS))
+            walls[i]->get(w_x, w_z, w_w, w_h);
+            if (pos_x > (w_x - P_RADIUS) & pos_x<(w_x + w_w - P_RADIUS) & pos_z>(w_z - P_RADIUS) & pos_z < (w_z + w_h + P_RADIUS))
             {
-                pos_x = w_x-P_RADIUS;
-                Ismoving = false;
-                //std::cout << "here" << std::endl;
+                pos_x = w_x - P_RADIUS;
+                isMoving = false;
             }
         }
         break;
 
     case 'a':
         pos_x -= P_X_VEL;
-        if ((-pos_x) > ((BOARD_SIZE / 2.0) - (P_RADIUS))){
-            Ismoving = false;
+        if ((-pos_x) > ((BOARD_SIZE / 2.0) - (P_RADIUS)))
+        {
+            isMoving = false;
             pos_x = -((BOARD_SIZE / 2.0) - P_RADIUS);
-        }      
-    for (int i = 0; i < MAX_WALL; ++i)
-        {
-        walls[i]->get(w_x,w_z,w_w,w_h);
-        if (pos_x < (w_x +w_w + P_RADIUS) &  pos_x > (w_x - P_RADIUS) & pos_z > (w_z-P_RADIUS) & pos_z < (w_z+w_h+P_RADIUS))
-        {
-            pos_x = w_x + w_w + P_RADIUS;
-            Ismoving = false;
-            //std::cout << "here" << std::endl;
         }
+        for (int i = 0; i < MAX_WALL; ++i)
+        {
+            walls[i]->get(w_x, w_z, w_w, w_h);
+            if (pos_x<(w_x + w_w + P_RADIUS) & pos_x>(w_x - P_RADIUS) & pos_z > (w_z - P_RADIUS) & pos_z < (w_z + w_h + P_RADIUS))
+            {
+                pos_x = w_x + w_w + P_RADIUS;
+                isMoving = false;
+            }
         }
         break;
 
     case 's':
-       pos_z -= P_Z_VEL;
-        if ((-pos_z) > ((BOARD_SIZE / 2.0) - (P_RADIUS))){
-            Ismoving = false;
-             pos_z = -((BOARD_SIZE / 2.0) - P_RADIUS);
+        pos_z -= P_Z_VEL;
+        if ((-pos_z) > ((BOARD_SIZE / 2.0) - (P_RADIUS)))
+        {
+            isMoving = false;
+            pos_z = -((BOARD_SIZE / 2.0) - P_RADIUS);
         }
-           
-            for (int i = 0; i < MAX_WALL; ++i)
+
+        for (int i = 0; i < MAX_WALL; ++i)
         {
-        walls[i]->get(w_x,w_z,w_w,w_h);
-        if (pos_z < (w_z +w_h + P_RADIUS) &  pos_z > (w_z - P_RADIUS) & pos_x > (w_x-P_RADIUS) & pos_x < (w_x+w_w+P_RADIUS))
-        {
-            pos_z = w_z + w_h + P_RADIUS;
-            Ismoving = false;
-            //std::cout << "here" << std::endl;
-        }}
+            walls[i]->get(w_x, w_z, w_w, w_h);
+            if (pos_z<(w_z + w_h + P_RADIUS) & pos_z>(w_z - P_RADIUS) & pos_x > (w_x - P_RADIUS) & pos_x < (w_x + w_w + P_RADIUS))
+            {
+                pos_z = w_z + w_h + P_RADIUS;
+                isMoving = false;
+            }
+        }
         break;
 
     case 'w':
-     pos_z += P_Z_VEL;
-        if (pos_z > ((BOARD_SIZE / 2.0) - (P_RADIUS))){
-            Ismoving = false;
+        pos_z += P_Z_VEL;
+        if (pos_z > ((BOARD_SIZE / 2.0) - (P_RADIUS)))
+        {
+            isMoving = false;
             pos_z = (BOARD_SIZE / 2.0) - P_RADIUS;
         }
         for (int i = 0; i < MAX_WALL; ++i)
         {
-        walls[i]->get(w_x,w_z,w_w,w_h);
-        if (pos_z > (w_z - P_RADIUS) & pos_z < (w_z +w_h + P_RADIUS) & pos_x > (w_x-P_RADIUS) & pos_x < (w_x+w_w+P_RADIUS))
-        {
-            pos_z = w_z - (P_RADIUS);
-            Ismoving = false;
-            //std::cout << "here" << std::endl;
-        }}
+            walls[i]->get(w_x, w_z, w_w, w_h);
+            if (pos_z > (w_z - P_RADIUS) & pos_z<(w_z + w_h + P_RADIUS) & pos_x>(w_x - P_RADIUS) & pos_x < (w_x + w_w + P_RADIUS))
+            {
+                pos_z = w_z - (P_RADIUS);
+                isMoving = false;
+            }
+        }
         break;
-        
+
     case ' ':
         if (!isjumping)
         {
@@ -105,7 +104,7 @@ bool tagPlayer::handle_input(unsigned char key, Wall **walls)
         }
         break;
     }
-    return Ismoving;
+    return isMoving;
 }
 
 void tagPlayer::update()

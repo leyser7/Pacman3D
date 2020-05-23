@@ -28,13 +28,14 @@ using namespace std;
 #define  BOARD_SIZE      6.0f
 #define  MAX_LANES       8
 #define  MAX_WALL        43
+#define  MAX_FEED        17
 #define  MAX_GHOST       1
 #define  LVL_NUM_RAND     1000
 #define  POINTS_ON_ONE_ARROW  1
 #define  POINTS_ON_ONE_DONUT  20
 #define  MAX_LEVELS    4
 
-const int POINTS_TO_PASS[MAX_LEVELS] = {300,580,880,1280};
+//const int POINTS_TO_PASS[MAX_LEVELS] = {1445,1445*2,1445*3,1445*4};
 const int LVL_NUM_PROB[MAX_LEVELS] = {22,17,14,10};
 
 #define  NUM_MENU_ITEMS    5
@@ -82,6 +83,14 @@ const int LVL_NUM_PROB[MAX_LEVELS] = {22,17,14,10};
 #define CLR_CLR_G       0.1f
 #define CLR_CLR_B       0.4f
 #define CLR_CLR_A       1.0f
+
+//Color for Feed
+#define CLR_FEED_R      1.0f
+#define CLR_FEED_G      1.0f
+#define CLR_FEED_B      1.0f
+
+//FEED Descriptors
+#define FEED_RADIUS    0.09f 
 
 //Color for arrows
 #define CLR_ARR_R      0.2f
