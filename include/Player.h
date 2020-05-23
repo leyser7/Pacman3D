@@ -1,3 +1,13 @@
+/**
+ * @file Player.h
+ * @author Cristian Camilo Alzate Anzola
+ * @brief 
+ * @version 0.1
+ * @date 2020-05-23
+ * 
+ * @copyright Copyright (c) 2020
+ * 
+ */
 #ifndef __PLAYER_H__
 #define __PLAYER_H__
 #include <Wall.h>

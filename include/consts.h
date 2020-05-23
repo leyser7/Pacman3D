@@ -1,7 +1,5 @@
 #ifndef __CONSTS_H__
 #define __CONSTS_H__
-
-
 /** #includes     */
 #ifdef __APPLE__
 #include <GLUT/glut.h>

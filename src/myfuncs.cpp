@@ -1,3 +1,14 @@
+/**
+ * @file myfuncs.cpp
+ * @author Cristian Camilo Alzate Anzola
+ * @brief Logica de pacman
+ * @version 0.1
+ * @date 2020-05-23
+ * 
+ * @copyright Copyright (c) 2020
+ * 
+ */
+
 #include "myfuncs.h"
 #include "consts.h"
 #include "Player.h"
@@ -7,7 +18,6 @@
 #include <iostream>
 
 int screen_w = 640, screen_h = 480;
-
 int POINTS_TO_PASS[MAX_LEVELS];
 int n_feed = 0;
 int level;    //level
@@ -37,13 +47,25 @@ float menu_sel_angle = 0.0;
 float controls_angle = 0.0f;
 float credits_angle = 0.0f;
 
+/**
+ * @brief inicializa el fasntasma en una posicion aleatoria en la carcel.
+ * 
+ * @param ghost 
+ */
 void init_ghost(Ghost *ghost)
 {
     int pos_x = rand() % MAX_GHOST;
     ghost->set_pos(0.175 * 2 * pos_x, P_START_Y, 0.175 * 2);
     ghost->set_Alive(true);
 }
-
+/**
+ * @brief inicializa los puntos en un espacio donde no hay muros.
+ * 
+ * @param feed 
+ * @param x 
+ * @param y 
+ * @param z 
+ */
 void init_feed(Feed *feed, float x, float y, float z)
 {
     if (!feed->isWall(x, z, walls))
@@ -53,7 +75,11 @@ void init_feed(Feed *feed, float x, float y, float z)
         n_feed++;
     }
 }
-
+/**
+ * @brief Actualiza las variables de todos los elementos.
+ * 
+ * @param n 
+ */
 void update_vars(int n)
 {
     switch (global_GameState)
@@ -100,7 +126,6 @@ void update_vars(int n)
             if (ghosts[i]->get_Alive() == false)
                 init_ghost(ghosts[i]);
         }
-
         //feed
         for (size_t i = 0; i < MAX_FEED * MAX_FEED; i++)
         {
@@ -132,7 +157,10 @@ void update_vars(int n)
     glutPostRedisplay();
     glutTimerFunc((1000 / GAME_FPS), update_vars, 0);
 }
-
+/**
+ * @brief inicializa el nivel con los valores iniciales.
+ * 
+ */
 void init_level()
 {
     level = 1;
@@ -162,6 +190,10 @@ void init_level()
     }
     global_MainPlayer.set_pos(P_START_X, P_START_Y, P_START_Z);
 }
+/**
+ * @brief Inicializa el mapa con los muros funcion manual
+ * 
+ */
 void init_wall()
 {
     float diametro = WALL_W * 2.0f;
@@ -236,7 +268,10 @@ void init_wall()
     walls[41] = new Wall(diametro * -6.0f + diametro / 2.0f, diametro * -1.0f, diametro / 2.0f, diametro * 2.0f);
     walls[42] = new Wall(diametro * 6.0f, diametro * -1.0f, diametro / 2.0f, diametro * 2.0f);
 }
-//Initializes 3D rendering
+/**
+ * @brief Inicializa las letras y los objectos en el mapa en memoria
+ * 
+ */
 void init_Rendering()
 {
     try
@@ -265,10 +300,12 @@ void init_Rendering()
         ghosts[i] = new Ghost;
         ghosts[i]->set_color(r, g, b);
     }
+
     for (int i = 0; i < MAX_FEED * MAX_FEED; ++i)
     {
         feeds[i] = new Feed();
     }
+
     for (int i = 0; i < P_MAX_HEALTH; ++i)
     {
         lifes_player[i] = new Player();
@@ -299,7 +336,12 @@ void init_Rendering()
     glutTimerFunc((1000 / GAME_FPS), update_vars, 0);
 }
 
-//Called when the window is resized
+/**
+ * @brief Actualiza si la pantalla es movida.
+ * 
+ * @param w 
+ * @param h 
+ */
 void handle_resize(int w, int h)
 {
     screen_w = w;
@@ -316,7 +358,10 @@ void handle_resize(int w, int h)
                    1.0,                   //The near z clipping coordinate
                    200.0);                //The far z clipping coordinate
 }
-
+/**
+ * @brief Dibuja el plano del jugador
+ * 
+ */
 void draw_ground()
 {
     glPushMatrix();
@@ -330,7 +375,10 @@ void draw_ground()
     glColor3f(0, 0, 1);
     glPopMatrix();
 }
-
+/**
+ * @brief Dibuja los textos de los puntos y el nivel.
+ * 
+ */
 void draw_texts()
 {
     //Points
@@ -363,7 +411,10 @@ void draw_texts()
     t3dDraw3D(str2, 0, 0, 0.2);
     glPopMatrix();
 }
-
+/**
+ * @brief Dibuja las vida del jugador.
+ * 
+ */
 void draw_health()
 {
     for (size_t i = 0; i < P_MAX_HEALTH; i++)
@@ -372,7 +423,10 @@ void draw_health()
             lifes_player[i]->display();
     }
 }
-
+/**
+ * @brief Dibuja los demas objectos en el plano.
+ * 
+ */
 void playing_display()
 {
     // glTranslatef(0.5f, -0.3f, -1.8f);
@@ -403,6 +457,10 @@ void playing_display()
 }
 
 char controls_text[10] = "CONTROLS";
+/**
+ * @brief dibuja la guia de los controles.
+ * 
+ */
 void controls_display()
 {
     glTranslatef(0, 0, -9);
@@ -440,6 +498,10 @@ void controls_display()
 }
 
 char credits_text[10] = "CREDITS";
+/**
+ * @brief Dibuja los creditos.
+ * 
+ */
 void credits_display()
 {
     glTranslatef(0, 0, -9);
@@ -487,7 +549,10 @@ void credits_display()
     glPopMatrix();
     glPopMatrix();
 }
-
+/**
+ * @brief Display el mensaje de que se gano.
+ * 
+ */
 void display_lastmsg()
 {
     glPushMatrix();
@@ -500,10 +565,12 @@ void display_lastmsg()
         t3dDraw3D("OOPS! You lost the last game!\nBetter luck next time...", -1, 0, 0.2);
     glPopMatrix();
 }
-
 int menu_sel = 0;
 char menu_items[NUM_MENU_ITEMS][10] = {"Continue", "New Game", "Controls", "Credits", "Exit"};
-
+/**
+ * @brief muestra el menu del juego.
+ * 
+ */
 void menu_display()
 {
     glTranslatef(0, 0, -5);
@@ -539,6 +606,14 @@ void menu_display()
     }
 }
 int mousex, mousey;
+/**
+ * @brief captura el click del mouse para elegir entre las diferentes pantallas.
+ * 
+ * @param x1 
+ * @param y1 
+ * @param x2 
+ * @param y2 
+ */
 void mouse_click(int x1, int y1, int x2, int y2)
 {
     switch (global_GameState)
@@ -568,7 +643,12 @@ void mouse_click(int x1, int y1, int x2, int y2)
         break;
     }
 }
-
+/**
+ * @brief captura la posicion del mouse..
+ * 
+ * @param x 
+ * @param y 
+ */
 void mouse_motion(int x, int y)
 {
     mousex = x;
@@ -596,7 +676,10 @@ void mouse_motion(int x, int y)
         break;
     }
 }
-
+/**
+ * @brief Selecciona entre las diferentes pantallas.
+ * 
+ */
 void display(void)
 {
     //Clear information from last draw
@@ -625,7 +708,13 @@ void display(void)
 
     glutSwapBuffers();
 }
-
+/**
+ * @brief captura la tecla oprimida en el teclado.
+ * 
+ * @param key 
+ * @param x 
+ * @param y 
+ */
 void key(unsigned char key, int x, int y)
 {
     switch (global_GameState)
@@ -675,7 +764,10 @@ void key(unsigned char key, int x, int y)
     }
 }
 
-//Called when glut is idle
+/**
+ * @brief funcion paras opengl cuando esta inactivo.
+ * 
+ */
 void idle()
 {
     glutPostRedisplay();

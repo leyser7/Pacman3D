@@ -1,9 +1,22 @@
+/**
+ * @file Ghost.cpp
+ * @author Cristian Camilo Alzate Anzola
+ * @brief clase de fanstasma
+ * @version 0.1
+ * @date 2020-05-23
+ * 
+ * @copyright Copyright (c) 2020
+ * 
+ */
 #include "Ghost.h"
 #include "Player.h"
 #include "consts.h"
 #include <iostream>
 
-//Just construct the player at its start position
+/**
+ * @brief Construct a new Ghost:: Ghost object
+ * 
+ */
 Ghost::Ghost()
 {
     isAlive = false;
@@ -16,7 +29,13 @@ Ghost::Ghost()
     yVel = G_Y_VEL_MAX;
     zVel = G_Z_VEL;
 }
-
+/**
+ * @brief regresa verdadero si el fantasma toca a el jugador
+ * 
+ * @param p 
+ * @return true 
+ * @return false 
+ */
 bool Ghost::isCollided(tagPlayer &p)
 {
     if (!isAlive)
@@ -38,17 +57,29 @@ bool Ghost::isCollided(tagPlayer &p)
     //Otherwise it is a collision!!
     return true;
 }
-
+/**
+ * @brief asigna un valor booleano a el fantasma
+ * 
+ * @param iA 
+ */
 void Ghost::set_Alive(bool iA)
 {
     isAlive = iA;
 }
-
+/**
+ * @brief regresa el parametro isAlive
+ * 
+ * @return true 
+ * @return false 
+ */
 bool Ghost::get_Alive()
 {
     return isAlive;
 }
-
+/**
+ * @brief Muestra a el fanstasma
+ * 
+ */
 void Ghost::display()
 {
     if (!isAlive)
@@ -61,7 +92,13 @@ void Ghost::display()
     glutSolidSphere(P_RADIUS, P_SLICES, P_STACKS);
     glPopMatrix();
 }
-
+/**
+ * @brief Actualiza la posicion del fanstasma y la estrategia
+ * 
+ * @param p 
+ * @param walls 
+ * @param attack 
+ */
 void Ghost::update(tagPlayer &p, Wall **walls, bool attack)
 {
     if (!isAlive)
@@ -108,7 +145,12 @@ void Ghost::update(tagPlayer &p, Wall **walls, bool attack)
     }
 }
 
-//verify player position based on input...
+/**s
+ * @param key 
+ * @param walls 
+ * @return true 
+ * @return false 
+ */
 bool Ghost::isObstacle(unsigned char key, Wall **walls)
 {
     float w_x, w_z, w_w, w_h;

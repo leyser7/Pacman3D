@@ -1,3 +1,13 @@
+/**
+ * @file Ghost.h
+ * @author Cristian Camilo Alzate Anzola
+ * @brief 
+ * @version 0.1
+ * @date 2020-05-23
+ * 
+ * @copyright Copyright (c) 2020
+ * 
+ */
 #ifndef __GHOST_H__
 #define __GHOST_H__
 #include <Player.h>

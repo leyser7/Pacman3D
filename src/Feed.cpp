@@ -1,7 +1,22 @@
+/**
+ * @file Feed.cpp
+ * @author Cristian Camilo Alzate Anzola
+ * @brief clase depuntos
+ * @version 0.1
+ * @date 2020-05-23
+ * 
+ * @copyright Copyright (c) 2020
+ * 
+*/
+
 #include "Feed.h"
 #include "consts.h"
 #include <iostream>
 
+/**
+ * @brief Construct a new Feed:: Feed object
+ * 
+ */
 Feed::Feed()
 {
     isAlive = false;
@@ -9,12 +24,22 @@ Feed::Feed()
     color_g = CLR_FEED_G;
     color_b = CLR_FEED_B;
 }
-
+/**
+ * @brief funcion para asignar la variable isAlive
+ * 
+ * @param alive 
+ */
 void Feed::set_Alive(bool alive)
 {
     isAlive = alive;
 }
-
+/**
+ * @brief regresa booleana si el feed esta tocando el jugador
+ * 
+ * @param player 
+ * @return true 
+ * @return false 
+ */
 bool Feed::taken(Player player)
 {
     if (!isAlive)
@@ -29,7 +54,10 @@ bool Feed::taken(Player player)
     }
     return false;
 }
-
+/**
+ * @brief mostrar objecto
+ * 
+ */
 void Feed::display()
 {
     if (!isAlive)
@@ -42,7 +70,15 @@ void Feed::display()
     glutSolidSphere(FEED_RADIUS, P_SLICES, P_STACKS);
     glPopMatrix();
 }
-
+/**
+ * @brief regresa verdadero si hay un muro en esa posicion
+ * 
+ * @param x 
+ * @param z 
+ * @param walls 
+ * @return true 
+ * @return false 
+ */
 bool Feed::isWall(float x, float z, Wall **walls)
 {
     float pos_x = x;

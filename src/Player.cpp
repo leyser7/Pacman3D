@@ -1,9 +1,21 @@
-
+/**
+ * @file Player.cpp
+ * @author Cristian Camilo Alzate Anzola
+ * @brief 
+ * @version 0.1
+ * @date 2020-05-23
+ * 
+ * @copyright Copyright (c) 2020
+ * 
+ */
 #include "Player.h"
 #include "consts.h"
 #include <iostream>
 
-//Just construct the player at its start position
+/**
+ * @brief Construct a new tag Player::tag Player object
+ * 
+ */
 tagPlayer::tagPlayer()
 {
     pos_x = P_START_Z;
@@ -17,8 +29,14 @@ tagPlayer::tagPlayer()
     zVel = P_Z_VEL;
     isjumping = false;
 }
-
-//Update player position based on input...
+/**
+ * @brief Actualiza la posicion del jugador teniendo en cuenta los muros.
+ * 
+ * @param key 
+ * @param walls 
+ * @return true 
+ * @return false 
+ */
 bool tagPlayer::handle_input(unsigned char key, Wall **walls)
 {
     float w_x, w_z, w_w, w_h;
@@ -108,7 +126,12 @@ bool tagPlayer::handle_input(unsigned char key, Wall **walls)
     }
     return isMoving;
 }
-
+/**
+ * @brief actualiza la  posicion del jugador
+ * 
+ * Function no utilizada en el pacman.
+ * 
+ */
 void tagPlayer::update()
 {
     //pos_x += xVel;
@@ -126,8 +149,10 @@ void tagPlayer::update()
         }
     }
 }
-
-// Display the player
+/**
+ * @brief Muestra a el jugador.
+ * 
+ */
 void tagPlayer::display()
 {
     glPushMatrix();
@@ -138,21 +163,39 @@ void tagPlayer::display()
     glutSolidSphere(P_RADIUS, P_SLICES, P_STACKS);
     glPopMatrix();
 }
-
+/**
+ * @brief obtiene la posicion del jugador
+ * 
+ * @param x 
+ * @param y 
+ * @param z 
+ */
 void tagPlayer::get_pos(float &x, float &y, float &z)
 {
     x = pos_x;
     y = pos_y;
     z = pos_z;
 }
-
+/**
+ * @brief asigna la posicion del jugador
+ * 
+ * @param x 
+ * @param y 
+ * @param z 
+ */
 void tagPlayer::set_pos(float x, float y, float z)
 {
     pos_x = x;
     pos_y = y;
     pos_z = z;
 }
-
+/**
+ * @brief asigna el color a el objecto.
+ * 
+ * @param r 
+ * @param g 
+ * @param b 
+ */
 void tagPlayer::set_color(float r, float g, float b)
 {
     color_r = r;
